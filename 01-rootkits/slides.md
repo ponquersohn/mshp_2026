@@ -12,7 +12,7 @@ title: What if the kernel lies? Hunting Linux rootkits
 ![w:540](assets/lkmhunter_header.png)
 Mega Sekurak Hacking Party
 
-<!-- 00:00–00:20. Prep deck, then terminal/editor for the three investigations. Presenter commands and source bookmarks live in script.md. No need to return to slides between samples. -->
+<!-- 00:00–00:20. Prep deck, then terminal/editor for the three investigations. Presenter commands and source bookmarks live in https://github.com/ponquersohn/lkmhunter/blob/master/docs/workshops/mshp/script.md. No need to return to slides between samples. -->
 
 ---
 <!-- _class: invert whoami -->
@@ -87,7 +87,7 @@ read a directory, open a file, or create a process.
 The syscall **number** selects the operation; **arguments** supply its inputs.<br>
 The kernel returns a **result or error** and may write data into a buffer.
 
-<!-- 01:30–02:05. Diagram shows one directory-read round trip, not the whole ls execution. A library call need not map one-to-one to a syscall. getdents64 writes directory entries into a user-space buffer and returns the byte count, zero at end, or an error. fd is an open directory's file descriptor. Brief terminal switch: strace -e trace=openat,getdents64 ls /root/workshop01, from script.md. Point to one getdents64 call, its arguments, and returned byte count, then return. Descriptor numbers will matter again for Singularity. -->
+<!-- 01:30–02:05. Diagram shows one directory-read round trip, not the whole ls execution. A library call need not map one-to-one to a syscall. getdents64 writes directory entries into a user-space buffer and returns the byte count, zero at end, or an error. fd is an open directory's file descriptor. Brief terminal switch: strace -e trace=openat,getdents64 ls /root/workshop01, from https://github.com/ponquersohn/lkmhunter/blob/master/docs/workshops/mshp/script.md. Point to one getdents64 call, its arguments, and returned byte count, then return. Descriptor numbers will matter again for Singularity. -->
 
 ---
 ## A module brings code into the kernel
@@ -105,7 +105,7 @@ Its code executes with **kernel privileges**.
 
 **Drivers and rootkits can enter through the same door.**
 
-<!-- 02:25–03:00. Open demo/mini-module/mshp_hello.c using script.md. Point to persistent data, init/exit functions, and their registration macros. This module only logs messages. Normal successful load/unload lifecycle is shown; unloading needs kernel support and can be refused while in use. Init-only code can be freed after successful initialization. On-disk ELF and runtime region dumps are different artifacts. Loading depends on capabilities and enforced policy, not merely UID 0. struct module layout depends on the exact build. BTF/DWARF help discover layout; neither is a trusted expected memory image. -->
+<!-- 02:25–03:00. Open https://github.com/ponquersohn/lkmhunter/blob/master/docs/workshops/mshp/demo/mini-module/mshp_hello.c using https://github.com/ponquersohn/lkmhunter/blob/master/docs/workshops/mshp/script.md. Point to persistent data, init/exit functions, and their registration macros. This module only logs messages. Normal successful load/unload lifecycle is shown; unloading needs kernel support and can be refused while in use. Init-only code can be freed after successful initialization. On-disk ELF and runtime region dumps are different artifacts. Loading depends on capabilities and enforced policy, not merely UID 0. struct module layout depends on the exact build. BTF/DWARF help discover layout; neither is a trusted expected memory image. -->
 
 ---
 ## A hook puts code on the path
@@ -146,7 +146,7 @@ An **address** is a location. A **symbol** names it. A **pointer** holds one.
 
 **A hook rewrites a pointer: same slot, different destination.**
 
-<!-- 04:15–04:40. Theory only. Addresses are illustrative, not captured; 217 is getdents64 on x86-64. The diagram follows one table entry: the symbol names the table, the slot holds a pointer, the pointer leads to machine code. The value and the bytes at that address are different things. Kernel and programs use virtual addresses; physical translation stays in script.md. Classic Diamorphine-style hooks rewrite this slot; the supplied newer build patches direct calls in x64_sys_call instead, so do not imply all dispatch reads sys_call_table. Transition: to spot a rewritten pointer we need to know what it should be: the kernel as built. -->
+<!-- 04:15–04:40. Theory only. Addresses are illustrative, not captured; 217 is getdents64 on x86-64. The diagram follows one table entry: the symbol names the table, the slot holds a pointer, the pointer leads to machine code. The value and the bytes at that address are different things. Kernel and programs use virtual addresses; physical translation stays in https://github.com/ponquersohn/lkmhunter/blob/master/docs/workshops/mshp/script.md. Classic Diamorphine-style hooks rewrite this slot; the supplied newer build patches direct calls in x64_sys_call instead, so do not imply all dispatch reads sys_call_table. Transition: to spot a rewritten pointer we need to know what it should be: the kernel as built. -->
 
 ---
 ## vmlinux: the kernel before it booted
@@ -208,7 +208,7 @@ offset = 0x7fff81001000 + (0xffffffff81234560 − 0xffffffff81000000)
        = 0x7fff81235560          → seek there, read the bytes
 ```
 
-<!-- 05:50–06:15. Illustrative values for x86-64, matching the address on the pointer slide; use the guest's readelf output. 0xffffffff81234560 is about 1.8 × 10^19, just under 2^64 = 16 EiB. kcore's size is the mapped address range, not RAM; it is sparse, so ls shows ~128T on 4-level paging. General rule: offset = p_offset + (address − p_vaddr) for the LOAD segment that contains the address. No physical-address calculation in this read. Kallsyms already gives runtime addresses: do not add KASLR here. KASLR matters only when bringing vmlinux addresses into this boot, which is the next slide. The maths tax is bookkeeping any debugger does; the optional GDB example in script.md shows name → address → bytes. -->
+<!-- 05:50–06:15. Illustrative values for x86-64, matching the address on the pointer slide; use the guest's readelf output. 0xffffffff81234560 is about 1.8 × 10^19, just under 2^64 = 16 EiB. kcore's size is the mapped address range, not RAM; it is sparse, so ls shows ~128T on 4-level paging. General rule: offset = p_offset + (address − p_vaddr) for the LOAD segment that contains the address. No physical-address calculation in this read. Kallsyms already gives runtime addresses: do not add KASLR here. KASLR matters only when bringing vmlinux addresses into this boot, which is the next slide. The maths tax is bookkeeping any debugger does; the optional GDB example in https://github.com/ponquersohn/lkmhunter/blob/master/docs/workshops/mshp/script.md shows name → address → bytes. -->
 
 ---
 ## KASLR: the kernel moves every boot
@@ -264,7 +264,7 @@ Tools to **detect**, and sometimes **disarm**, running rootkits.
 </div>
 </div>
 
-<!-- 08:00–10:00. First, before loading anything — Terminal stop (90 s): run the KASLR block in script.md before loading Diamorphine; lkmhunter finds the matching baseline, measures the slide from live symbols and cross-checks it on several anchors. Zero addresses mean unavailable visibility, not proof of no randomization. If nokaslr is active, report slide 0 honestly and use the prepared labelled second boot capture; no live reboot. Exit codes: 0 complete/no suspicious finding, 1 complete/findings, 2 incomplete/unavailable/failed. Then the hand-off: Hand off to script.md at “10–12 · Diamorphine”. Keep the deck here throughout the three acts. No demo commands, expected counts, or historical addresses on slides. Eight-minute prep is now ten minutes including the KASLR terminal stop. -->
+<!-- 08:00–10:00. First, before loading anything — Terminal stop (90 s): run the KASLR block in https://github.com/ponquersohn/lkmhunter/blob/master/docs/workshops/mshp/script.md before loading Diamorphine; lkmhunter finds the matching baseline, measures the slide from live symbols and cross-checks it on several anchors. Zero addresses mean unavailable visibility, not proof of no randomization. If nokaslr is active, report slide 0 honestly and use the prepared labelled second boot capture; no live reboot. Exit codes: 0 complete/no suspicious finding, 1 complete/findings, 2 incomplete/unavailable/failed. Then the hand-off: Hand off to https://github.com/ponquersohn/lkmhunter/blob/master/docs/workshops/mshp/script.md at “10–12 · Diamorphine”. Keep the deck here throughout the three acts. No demo commands, expected counts, or historical addresses on slides. Eight-minute prep is now ten minutes including the KASLR terminal stop. -->
 
 ---
 ## Better than detecting: don't let it load
@@ -418,7 +418,7 @@ Destination = address of the next instruction + signed `rel32`. `E8` calls work 
 
 <div style="font-size: 0.42em;"><a href="https://github.com/torvalds/linux/blob/v6.9/arch/x86/entry/syscall_64.c">Linux: x64_sys_call</a> · <a href="https://github.com/m0nad/Diamorphine/blob/master/diamorphine.c">Diamorphine: flipswitch_func</a></div>
 
-<!-- Backup. Native x86-64 path, simplified: entry/exit work, tracing, seccomp, and bounds checks omitted. Syscall number arrives in RAX and is saved in pt_regs; nr=217 is getdents64 on this ABI. Upstream switched dispatch in 6.9; vendor backports and compiled branch layouts vary, so inspect the actual build. The generated switch becomes comparisons and direct transfers; do not promise a particular decision-tree shape. The supplied local Diamorphine testbed source, diamorphine.c:412–502, scans x64_sys_call for E8 CALL or E9 JMP rel32 instructions targeting the original handlers. Destination = instruction address + 5 + sign-extended displacement; it changes the four displacement bytes while retaining the opcode. It temporarily clears CR0.WP for writes, then restores protection. Older versions replace syscall-table slots instead. lkmhunter compares decoded transfers against relocated matching vmlinux. script.md:660–714 selects only the two directory findings, backs up live bytes, restores five bytes per site with lkmhunter copy, and verifies readback. Keep the kill hook until signal 63 has exposed the module; rmmod runs its cleanup, which searches for reverse transfers and restores kill. The directory branches have already been restored. Raw live writes via lkm_mem do not synchronize CPUs: this is the rehearsed disposable VM procedure, not a general safe kernel text-patching API. Restored dispatch is containment, not proof of a clean system. -->
+<!-- Backup. Native x86-64 path, simplified: entry/exit work, tracing, seccomp, and bounds checks omitted. Syscall number arrives in RAX and is saved in pt_regs; nr=217 is getdents64 on this ABI. Upstream switched dispatch in 6.9; vendor backports and compiled branch layouts vary, so inspect the actual build. The generated switch becomes comparisons and direct transfers; do not promise a particular decision-tree shape. The supplied local Diamorphine testbed source, diamorphine.c:412–502, scans x64_sys_call for E8 CALL or E9 JMP rel32 instructions targeting the original handlers. Destination = instruction address + 5 + sign-extended displacement; it changes the four displacement bytes while retaining the opcode. It temporarily clears CR0.WP for writes, then restores protection. Older versions replace syscall-table slots instead. lkmhunter compares decoded transfers against relocated matching vmlinux. https://github.com/ponquersohn/lkmhunter/blob/master/docs/workshops/mshp/script.md#L660-L714 selects only the two directory findings, backs up live bytes, restores five bytes per site with lkmhunter copy, and verifies readback. Keep the kill hook until signal 63 has exposed the module; rmmod runs its cleanup, which searches for reverse transfers and restores kill. The directory branches have already been restored. Raw live writes via lkm_mem do not synchronize CPUs: this is the rehearsed disposable VM procedure, not a general safe kernel text-patching API. Restored dispatch is containment, not proof of a clean system. -->
 
 ---
 ## KoviD changes where ftrace returns

@@ -25,7 +25,7 @@ Artifacts: `build/01-rootkits/{index.html,slides.pdf,slides.pptx}` and `build/02
 ## Demos
 
 - [Hardening learning guide](02-hardening/README.md): one QEMU lab covering investigation, cleanup, application confinement and reset.
-- [Rootkit rehearsal guide](01-rootkits/demo/README.md): compatible guest, current CLI, evidence interpretation, saved-run fallback.
+- [Rootkit lab and workshop guide](https://github.com/ponquersohn/lkmhunter/blob/master/docs/workshops/mshp/README.md): compatible guest, current CLI, evidence interpretation, saved-run fallback.
 
 `make` only builds slides. It does not provision machines, edit SSH, install firewall rules, or load modules. Lab configurations are drafts requiring a timed VM rehearsal; expected outcomes are not fabricated captured outputs.
 
