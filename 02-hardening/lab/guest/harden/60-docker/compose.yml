@@ -1,0 +1,26 @@
+# (reference — `docker compose -f compose.yml up -d --build`; needs the compose v2
+#  plugin, not installed by default. up.sh uses plain `docker run` instead.)
+# Least-privilege container runtime. Read each line as "one thing the root RCE
+# used to be able to do, now removed."
+services:
+  pingboard:
+    build:
+      context: /opt/pingboard        # Dockerfile COPYs app/pingboard.py from here
+      dockerfile: harden/60-docker/Dockerfile
+    image: mshp/pingboard:hardened
+    container_name: pingboard
+    ports:
+      - "8080:8080"
+    user: "10001:10001"              # not root
+    read_only: true                  # rootfs is immutable; no dropping payloads
+    cap_drop: [ "ALL" ]              # strip every Linux capability
+    security_opt:
+      - no-new-privileges:true       # no setuid escalation inside
+    pids_limit: 128                  # fork-bomb ceiling
+    mem_limit: 256m
+    tmpfs:
+      - /tmp
+      - /var/log/pingboard           # writable log dir without a host mount
+    restart: unless-stopped
+    # NOTE: no volumes from the host. The container cannot see /root/flag.txt,
+    # /srv/pingboard/secret.env, /etc/cron.d, or anything else on the box.

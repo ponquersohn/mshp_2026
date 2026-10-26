@@ -1,0 +1,35 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1100" height="222" viewBox="0 0 1100 222">
+  <defs>
+    <marker id="arrow-amber" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto"><path d="M0 0 8 4 0 8" fill="none" stroke="#f5eb42" stroke-width="1.5"/></marker>
+  </defs>
+  <g font-family="DejaVu Sans, sans-serif" font-size="18" fill="#f2f1e6">
+    <text x="4" y="18" fill="#aeb9c2">vmlinux, as built</text>
+    <text x="4" y="146" fill="#aeb9c2">This boot</text>
+
+    <!-- kernel text range: 1 GiB window -->
+    <g fill="#0e161e" stroke="#3a4652" stroke-width="2">
+      <rect x="4" y="28" width="1092" height="54" rx="6"/>
+      <rect x="4" y="156" width="1092" height="54" rx="6"/>
+    </g>
+
+    <!-- kernel image -->
+    <rect x="22" y="28" width="180" height="54" rx="6" fill="#16202a" stroke="#aeb9c2" stroke-width="2"/>
+    <rect x="568" y="156" width="180" height="54" rx="6" fill="#16202a" stroke="#ff4c4c" stroke-width="2"/>
+    <g text-anchor="middle" font-size="17">
+      <text x="112" y="61">kernel image</text>
+      <text x="658" y="189" fill="#ff4c4c">kernel image</text>
+    </g>
+
+    <g font-family="DejaVu Sans Mono, monospace" font-size="15">
+      <text x="220" y="51"><tspan fill="#f5eb42">_stext</tspan><tspan x="362" fill="#aeb9c2">0xffffffff81000000</tspan></text>
+      <text x="220" y="72"><tspan fill="#f5eb42">sys_call_table</tspan><tspan x="362" fill="#aeb9c2">0xffffffff82200000</tspan></text>
+      <text x="766" y="179"><tspan fill="#f5eb42">_stext</tspan><tspan x="908" fill="#aeb9c2">0xffffffffa1000000</tspan></text>
+      <text x="766" y="200"><tspan fill="#f5eb42">sys_call_table</tspan><tspan x="908" fill="#aeb9c2">0xffffffffa2200000</tspan></text>
+    </g>
+
+    <!-- the slide -->
+    <path d="M112 84 C112 122 658 104 658 146" fill="none" stroke="#f5eb42" stroke-width="3" stroke-dasharray="9 6" marker-end="url(#arrow-amber)"/>
+    <text x="440" y="108" fill="#f5eb42" font-weight="bold">+ slide 0x20000000</text>
+    <text x="1092" y="108" text-anchor="end" fill="#5d6a75" font-size="14">1 GiB window · random 2 MiB-aligned base · not to scale</text>
+  </g>
+</svg>

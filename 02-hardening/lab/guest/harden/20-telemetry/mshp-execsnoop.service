@@ -1,0 +1,13 @@
+[Unit]
+Description=MSHP eBPF exec telemetry (bpftrace) -> /var/log/mshp/exec.log
+After=multi-user.target
+
+[Service]
+# bpftrace attaches an eBPF program to the execve tracepoint and streams every
+# exec, line-buffered, to a file. -B line keeps the log tailable in real time.
+ExecStartPre=/usr/bin/install -d -m0750 /var/log/mshp
+ExecStart=/usr/bin/bpftrace -B line -o /var/log/mshp/exec.log /opt/pingboard/harden/20-telemetry/execsnoop.bt
+Restart=on-failure
+
+[Install]
+WantedBy=multi-user.target

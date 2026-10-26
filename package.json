@@ -1,0 +1,8 @@
+{
+  "name": "mshp-presentations",
+  "private": true,
+  "description": "Mega Securak Hacking Party — Marp decks",
+  "devDependencies": {
+    "@marp-team/marp-cli": "4.5.1"
+  }
+}

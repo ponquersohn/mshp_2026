@@ -1,0 +1,13 @@
+[Unit]
+Description=Application data initialization
+After=network.target
+Before=pingboard.service
+
+[Service]
+Type=oneshot
+ExecStart=/bin/sh /opt/app-data/start.sh
+RemainAfterExit=yes
+RuntimeDirectory=pingboard
+RuntimeDirectoryMode=0700
+User=root
+KillMode=control-group

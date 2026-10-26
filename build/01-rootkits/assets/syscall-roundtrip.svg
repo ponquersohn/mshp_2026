@@ -1,0 +1,19 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1100" height="190" viewBox="0 0 1100 190">
+  <defs>
+    <marker id="arrow" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto-start-reverse"><path d="M0 0 8 4 0 8" fill="none" stroke="#5ad1ff" stroke-width="1.5"/></marker>
+  </defs>
+  <g font-family="DejaVu Sans, sans-serif" text-anchor="middle">
+    <rect x="4" y="25" width="270" height="140" rx="12" fill="#0e161e" stroke="#aeb9c2" stroke-width="2"/>
+    <text x="139" y="65" fill="#f2f1e6" font-size="26" font-weight="bold">User space: ls</text>
+    <text x="139" y="101" fill="#aeb9c2" font-size="20">Calls library code</text>
+    <text x="139" y="132" fill="#aeb9c2" font-size="20">Prints returned names</text>
+    <rect x="826" y="25" width="270" height="140" rx="12" fill="#0e161e" stroke="#ff4c4c" stroke-width="2"/>
+    <text x="961" y="65" fill="#f2f1e6" font-size="26" font-weight="bold">Kernel</text>
+    <text x="961" y="101" fill="#aeb9c2" font-size="20">Reads the directory</text>
+    <text x="961" y="132" fill="#aeb9c2" font-size="20">Fills the caller’s buffer</text>
+    <path d="M294 65 H806" fill="none" stroke="#5ad1ff" stroke-width="3" marker-end="url(#arrow)"/>
+    <text x="550" y="43" fill="#f2f1e6" font-size="22">Request: getdents64(fd, buffer, size)</text>
+    <path d="M806 121 H294" fill="none" stroke="#5ad1ff" stroke-width="3" marker-end="url(#arrow)"/>
+    <text x="550" y="157" fill="#f2f1e6" font-size="22">Response: directory entries + byte count</text>
+  </g>
+</svg>

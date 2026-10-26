@@ -1,0 +1,49 @@
+#!/usr/sbin/nft -f
+# Hardening step 2: say what the box may send and receive. A default-drop
+# INPUT policy is standard; the lesson here is the default-drop OUTPUT policy:
+# a compromised app should not be able to phone home or exfiltrate.
+#
+# Load:     sudo nft -c -f mshp.nft   (check)   then   sudo nft -f mshp.nft
+# Inspect:  sudo nft list table inet mshp
+# Rollback: sudo nft delete table inet mshp     (gone on reboot anyway)
+#
+# NOTE: this filters traffic to/from THE HOST. Containers get NAT'd through
+# Docker's own chains; egress control for the container case is a separate
+# integration (see the README). Demo this while pingboard is still the root
+# host service to see probe #4 flip to EGRESS-BLOCKED.
+#
+# We manage ONLY our own `table inet mshp` and never `flush ruleset` — that
+# would wipe Docker's iptables-nft chains and break the container step (60).
+# apply.sh deletes just this table before reloading, so it stays idempotent.
+
+table inet mshp {
+  chain input {
+    type filter hook input priority 0; policy drop;
+    iifname "lo" accept
+    ct state established,related accept
+    ct state invalid drop
+    meta l4proto { icmp, ipv6-icmp } accept
+    tcp dport { 22, 8080 } counter accept comment "ssh + the app"
+    counter drop
+  }
+
+  chain output {
+    type filter hook output priority 0; policy drop;
+    oifname "lo" accept
+    oifname "docker0" accept         # host may reach its own containers (docker-proxy)
+    ct state established,related accept
+    # The only new outbound we allow: DNS to a resolver. Everything else the
+    # app might try — curl to the internet, a reverse shell — is dropped.
+    udp dport 53 accept
+    tcp dport 53 accept
+    counter drop comment "no unsolicited egress"
+  }
+
+  chain forward {
+    # Left to accept on purpose: Docker manages forwarded/container traffic in
+    # its own (ip/ip6) tables, and a drop here would break the container demo's
+    # published port and egress. Container egress control is a separate job
+    # (a Docker user-defined network, or rules keyed on the docker bridge).
+    type filter hook forward priority 0; policy accept;
+  }
+}

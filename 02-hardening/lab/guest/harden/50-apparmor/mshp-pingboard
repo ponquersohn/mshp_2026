@@ -1,0 +1,56 @@
+# AppArmor profile for pingboard. Mandatory Access Control: this constrains the
+# process no matter which UID it runs as. Even as root, it cannot read the
+# secrets or exec arbitrary binaries — only the few things the app legitimately
+# needs. The command-injection bug still fires; the shell it spawns can do
+# almost nothing.
+#
+# Load:     sudo apparmor_parser -r mshp-pingboard
+# Attach:   via the systemd drop-in in apply.sh (AppArmorProfile=mshp-pingboard)
+# Status:   sudo aa-status | grep pingboard
+# Rollback: sudo apparmor_parser -R mshp-pingboard
+
+abi <abi/4.0>,
+#include <tunables/global>
+
+profile mshp-pingboard flags=(enforce) {
+  #include <abstractions/base>
+  #include <abstractions/python>
+  #include <abstractions/nameservice>
+
+  # The interpreter and the application code.
+  /usr/bin/python3.* mr,
+  /usr/bin/python3   mr,
+  /usr/lib/python3*/** mr,
+  /opt/pingboard/app/** r,
+
+  # The HTTP server + DNS/ICMP sockets.
+  network inet  stream,
+  network inet6 stream,
+  network inet  dgram,
+  network inet6 dgram,
+  network inet  raw,       # ping (IPv4)
+  network inet6 raw,       # ping (IPv6)
+  capability net_raw,      # ping needs a raw socket when run as root
+
+  # It legitimately shells out to ping. Allow /bin/sh and ping, inheriting this
+  # same profile (ix) — so anything ELSE the shell is told to exec is denied.
+  /usr/bin/dash ix,
+  /bin/dash     ix,
+  /bin/sh       ix,
+  /usr/bin/ping mrix,
+  /bin/ping     mrix,
+
+  # Writable areas the app actually uses.
+  /var/log/pingboard/ rw,
+  /var/log/pingboard/** rw,
+  owner /tmp/** rw,
+
+  # Explicit, audited refusals — these show up in the kernel log on each try.
+  audit deny /root/** rwx,
+  audit deny /srv/pingboard/** rwx,
+  audit deny /etc/shadow r,
+  audit deny /etc/cron.d/** rwx,
+
+  # No 'ix' is granted to id, cat, nc, bash, curl, ... so an injected
+  # ";id" or ";cat /root/flag.txt" cannot exec at all under this profile.
+}

@@ -1,0 +1,31 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1100" height="210" viewBox="0 0 1100 210">
+  <defs>
+    <marker id="arrow" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto"><path d="M0 0 8 4 0 8" fill="none" stroke="#5ad1ff" stroke-width="1.5"/></marker>
+  </defs>
+  <g font-family="DejaVu Sans, sans-serif" font-size="21" fill="#f2f1e6">
+    <text x="4" y="25" fill="#aeb9c2">Normal execution</text>
+    <text x="4" y="126" fill="#aeb9c2">Example: a hook wraps the original function</text>
+    <g fill="#0e161e" stroke="#aeb9c2" stroke-width="2">
+      <rect x="4" y="39" width="170" height="52" rx="9"/>
+      <rect x="464" y="39" width="170" height="52" rx="9"/>
+      <rect x="924" y="39" width="170" height="52" rx="9"/>
+      <rect x="4" y="142" width="170" height="58" rx="9"/>
+      <rect x="464" y="142" width="170" height="58" rx="9"/>
+      <rect x="924" y="142" width="170" height="58" rx="9"/>
+    </g>
+    <g fill="#0e161e" stroke="#ff4c4c" stroke-width="2">
+      <rect x="234" y="142" width="170" height="58" rx="9"/>
+      <rect x="694" y="142" width="170" height="58" rx="9"/>
+    </g>
+    <g text-anchor="middle">
+      <text x="89" y="73">Caller</text><text x="549" y="73">Original</text><text x="1009" y="73">Result</text>
+      <text x="89" y="179">Caller</text><text x="549" y="179">Original</text><text x="1009" y="179">Result</text>
+      <text x="319" y="166" fill="#ff4c4c">Hook: inspect</text><text x="319" y="190" fill="#ff4c4c">arguments</text>
+      <text x="779" y="166" fill="#ff4c4c">Hook: filter</text><text x="779" y="190" fill="#ff4c4c">output</text>
+    </g>
+    <g fill="none" stroke="#5ad1ff" stroke-width="3" marker-end="url(#arrow)">
+      <path d="M185 65 H449"/><path d="M645 65 H909"/>
+      <path d="M185 171 H219"/><path d="M415 171 H449"/><path d="M645 171 H679"/><path d="M875 171 H909"/>
+    </g>
+  </g>
+</svg>

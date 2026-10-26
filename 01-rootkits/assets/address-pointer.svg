@@ -1,0 +1,41 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1100" height="300" viewBox="0 0 1100 300">
+  <defs>
+    <marker id="arrow" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto"><path d="M0 0 8 4 0 8" fill="none" stroke="#5ad1ff" stroke-width="1.5"/></marker>
+    <marker id="arrow-red" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto"><path d="M0 0 8 4 0 8" fill="none" stroke="#ff4c4c" stroke-width="1.5"/></marker>
+  </defs>
+  <g font-family="DejaVu Sans, sans-serif" font-size="20" fill="#f2f1e6">
+    <g fill="#aeb9c2">
+      <text x="4" y="24">Symbol: a name</text>
+      <text x="344" y="24">Address: where it lives</text>
+      <text x="780" y="24">Address: where it points</text>
+    </g>
+    <g fill="#0e161e" stroke="#aeb9c2" stroke-width="2">
+      <rect x="4" y="40" width="260" height="70" rx="9"/>
+      <rect x="344" y="40" width="340" height="70" rx="9"/>
+      <rect x="780" y="40" width="316" height="70" rx="9"/>
+    </g>
+    <rect x="780" y="196" width="316" height="70" rx="9" fill="#0e161e" stroke="#ff4c4c" stroke-width="2"/>
+    <g font-family="DejaVu Sans Mono, monospace" font-size="19">
+      <text x="134" y="70" text-anchor="middle" fill="#f5eb42">sys_call_table</text>
+      <text x="134" y="96" text-anchor="middle" fill="#aeb9c2" font-size="16">entry 217: getdents64</text>
+      <text x="358" y="66" fill="#8a96a0" font-size="16">0xffffffff822006c8</text>
+      <text x="358" y="96" fill="#f5eb42">0xffffffff81234560</text>
+      <text x="794" y="66" fill="#8a96a0" font-size="16">0xffffffff81234560</text>
+      <text x="794" y="96">48 89 e5 41 57 …</text>
+      <text x="794" y="222" fill="#8a96a0" font-size="16">0xffffffffc0a01000</text>
+      <text x="794" y="252" fill="#ff4c4c">rootkit code</text>
+    </g>
+    <g fill="#aeb9c2" font-size="17">
+      <text x="344" y="138">The value stored here is another</text>
+      <text x="344" y="160">address: that makes it a <tspan fill="#f2f1e6" font-weight="bold">pointer</tspan></text>
+      <text x="780" y="138">Machine code of the real</text>
+      <text x="780" y="160">getdents64 handler</text>
+      <text x="780" y="290" fill="#ff4c4c">Hooked: pointer rewritten</text>
+    </g>
+    <g fill="none" stroke-width="3">
+      <path d="M270 75 H333" stroke="#5ad1ff" marker-end="url(#arrow)"/>
+      <path d="M690 75 H769" stroke="#5ad1ff" marker-end="url(#arrow)"/>
+      <path d="M690 92 C735 92 730 231 769 231" stroke="#ff4c4c" stroke-dasharray="8 6" marker-end="url(#arrow-red)"/>
+    </g>
+  </g>
+</svg>

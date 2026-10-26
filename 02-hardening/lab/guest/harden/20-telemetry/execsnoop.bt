@@ -1,0 +1,21 @@
+#!/usr/bin/env bpftrace
+/*
+ * Modern, low-overhead exec telemetry via eBPF. auditd (step 40) is the
+ * compliance-grade record; this is the "see it live, structured by lineage"
+ * view. Every execve on the box is printed with who called it and the full
+ * argument vector — so an injected `sh -c "...; id"` shows up as:
+ *
+ *   12:40:11 uid=0 pid=1234 ppid=900 caller=sh  -> /usr/bin/id id
+ *
+ * The caller=sh with ppid pointing at the pingboard python process is the
+ * attack's fingerprint. Production equivalents: Falco, Tetragon, Microsoft
+ * sysmonforlinux — all eBPF, all stream structured events off the host.
+ */
+tracepoint:syscalls:sys_enter_execve
+{
+  printf("%s uid=%d pid=%d ppid=%d caller=%-8s -> %s  ",
+         strftime("%H:%M:%S", nsecs),
+         uid, pid, curtask->real_parent->pid, comm,
+         str(args->filename));
+  join(args->argv);
+}

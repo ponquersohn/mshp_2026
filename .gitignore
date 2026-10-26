@@ -1,0 +1,45 @@
+# Dependencies and package caches
+node_modules/
+.npm/
+.cache/
+.venv/
+venv/
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+
+# QEMU lab disks, snapshots, downloaded images, and container archives
+/02-hardening/lab/images/
+*.qcow2
+*.qcow
+*.vmdk
+*.vdi
+*.iso
+
+# Lab runtime files and generated SSH keys
+/02-hardening/lab/console.log
+/02-hardening/lab/id_lab
+/02-hardening/lab/id_lab.pub
+
+# Kernel module build output
+*.o
+*.ko
+*.mod
+*.mod.c
+*.cmd
+Module.symvers
+modules.order
+.tmp_versions/
+
+# Local checkout symlink
+/lkmhunter
+
+# Editor and OS temporary files
+*.swp
+*.swo
+*~
+.DS_Store
+Thumbs.db
+02-hardening/scratchpad.md

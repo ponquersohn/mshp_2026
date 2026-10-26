@@ -1,0 +1,39 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1100" height="214" viewBox="0 0 1100 214">
+  <g font-family="DejaVu Sans, sans-serif" font-size="18" fill="#f2f1e6">
+    <text x="4" y="18" fill="#aeb9c2">Expected: <tspan fill="#f2f1e6">vmlinux + slide</tspan></text>
+    <text x="1096" y="18" text-anchor="end" fill="#aeb9c2">Live: <tspan fill="#f2f1e6">read through kcore</tspan></text>
+
+    <g fill="#0e161e" stroke="#aeb9c2" stroke-width="2">
+      <rect x="4" y="30" width="470" height="176" rx="9"/>
+      <rect x="626" y="30" width="470" height="176" rx="9"/>
+    </g>
+    <rect x="626" y="104" width="470" height="44" fill="rgba(255,76,76,0.12)"/>
+    <rect x="4" y="104" width="470" height="44" fill="rgba(255,76,76,0.06)"/>
+
+    <g font-family="DejaVu Sans Mono, monospace" font-size="16">
+      <g fill="#aeb9c2">
+        <text x="20" y="74">slot 0    read</text>
+        <text x="20" y="132">slot 217  getdents64</text>
+        <text x="20" y="188">x64_sys_call</text>
+        <text x="642" y="74">slot 0    read</text>
+        <text x="642" y="132">slot 217  getdents64</text>
+        <text x="642" y="188">x64_sys_call</text>
+      </g>
+      <g text-anchor="end">
+        <text x="458" y="74">0xffffffffa1456780</text>
+        <text x="458" y="132">0xffffffffa1234560</text>
+        <text x="458" y="188">e8 1b 4c 23 00 …</text>
+        <text x="1080" y="74">0xffffffffa1456780</text>
+        <text x="1080" y="132" fill="#ff4c4c">0xffffffffc0a01000</text>
+        <text x="1080" y="188">e8 1b 4c 23 00 …</text>
+      </g>
+    </g>
+
+    <g text-anchor="middle" font-size="30" font-weight="bold">
+      <text x="550" y="80" fill="#49d17a">=</text>
+      <text x="550" y="138" fill="#ff4c4c">≠</text>
+      <text x="550" y="194" fill="#49d17a">=</text>
+    </g>
+    <text x="550" y="160" text-anchor="middle" fill="#ff4c4c" font-size="15">a lead</text>
+  </g>
+</svg>

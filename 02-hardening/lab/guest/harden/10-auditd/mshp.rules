@@ -1,0 +1,31 @@
+## pingboard lab audit policy — full command + sensitive-access telemetry.
+## Goes in /etc/audit/rules.d/. The point: even where we cannot PREVENT the
+## injection, auditd writes an immutable-ish record of exactly what ran, as
+## whom, with what arguments, to /var/log/audit/audit.log.
+
+# Start clean.
+-D
+# Generous buffer; a web box under attack generates bursts of events.
+-b 8192
+--backlog_wait_time 0
+
+## Every program execution, with arguments, on this 64-bit box. This is what
+## catches the injected "id" / "cat /root/flag.txt" / reverse-shell attempts.
+-a always,exit -F arch=b64 -S execve -k exec
+-a always,exit -F arch=b32 -S execve -k exec
+
+## Reads of the secrets the RCE goes after.
+-w /root/flag.txt -p r -k secret
+-w /srv/pingboard/secret.env -p r -k secret
+
+## Classic persistence + identity tampering.
+-w /etc/cron.d/ -p wa -k persist
+-w /etc/crontab -p wa -k persist
+-w /etc/passwd -p wa -k identity
+-w /etc/shadow -p wa -k identity
+-w /etc/sudoers -p wa -k identity
+-w /etc/sudoers.d/ -p wa -k identity
+
+## Make the rules immutable until reboot (an attacker can't quietly auditctl -D).
+## Comment this out during rehearsal if you want to reload rules without reboot.
+-e 2

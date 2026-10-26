@@ -1,0 +1,5 @@
+# Shared Marp CLI config (picked up automatically from the repo root).
+themeSet:
+  - ./themes
+html: true
+allowLocalFiles: true

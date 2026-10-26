@@ -1,0 +1,14 @@
+[Unit]
+Description=pingboard fleet diagnostics (DELIBERATELY VULNERABLE lab target)
+Wants=app-data-start.service
+After=network.target app-data-start.service
+
+[Service]
+# The original sin: the whole thing runs as root, unconfined. Every hardening
+# step in ../harden/ chips away at what that root RCE can actually touch.
+ExecStart=/usr/bin/python3 -u /opt/pingboard/app/pingboard.py
+User=root
+Restart=on-failure
+
+[Install]
+WantedBy=multi-user.target

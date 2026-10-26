@@ -1,0 +1,9 @@
+// polkit backdoor (lab plant): anyone in group "webops" may run ANY polkit
+// action with no authentication — i.e. silent root via pkexec. A real-world
+// "make my life easier" rule that is actually a privilege-escalation hole.
+// Remediated by harden/03-privesc.
+polkit.addRule(function(action, subject) {
+    if (subject.isInGroup("webops")) {
+        return polkit.Result.YES;
+    }
+});
